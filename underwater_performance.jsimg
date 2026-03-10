@@ -1,56 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="underwater_performance.jsimg" timestamp="Fri Mar 06 18:08:12 CET 2026" xsi:noNamespaceSchemaLocation="Archive.xsd">
+<archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="underwater_performance.jsimg" timestamp="Tue Mar 10 11:42:36 CET 2026" xsi:noNamespaceSchemaLocation="Archive.xsd">
     <sim disableStatisticStop="false" logDecimalSeparator="," logDelimiter=";" logPath="/home/lorenzo/JMT" logReplaceMode="0" maxEvents="-1" maxSamples="1000000" name="underwater_performance.jsimg" polling="1.0" xsi:noNamespaceSchemaLocation="SIMmodeldefinition.xsd">
-        <userClass name="UnderwaterNodes" priority="0" referenceSource="Source" softDeadline="0.0" type="open"/>
-        <node name="Source">
-            <section className="RandomSource">
-                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
-                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
-                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
-                            <subParameter classPath="java.lang.Double" name="lambda">
-                                <value>10.0</value>
-                            </subParameter>
-                        </subParameter>
-                    </subParameter>
-                </parameter>
-            </section>
-            <section className="ServiceTunnel"/>
-            <section className="Router">
-                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
-                </parameter>
-            </section>
-        </node>
-        <node name="NodesRouter">
-            <section className="Queue">
-                <parameter classPath="java.lang.Integer" name="size">
-                    <value>-1</value>
-                </parameter>
-                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="java.lang.String" name="dropStrategy">
-                        <value>drop</value>
-                    </subParameter>
-                </parameter>
-                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
-                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
-                </parameter>
-            </section>
-            <section className="ServiceTunnel"/>
-            <section className="Router">
-                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
-                </parameter>
-            </section>
-        </node>
+        <userClass name="UnderwaterPacket" priority="0" referenceSource="ClassSwitch" softDeadline="0.0" type="open"/>
+        <userClass name="Node1" priority="0" referenceSource="Source 1" softDeadline="0.0" type="open"/>
+        <userClass name="Node2" priority="0" referenceSource="Source 2" softDeadline="0.0" type="open"/>
+        <userClass name="Node3" priority="0" referenceSource="Source 3" softDeadline="0.0" type="open"/>
         <node name="Node 1">
             <classSoftDeadlines>
+                <softDeadline>0.0</softDeadline>
+                <softDeadline>0.0</softDeadline>
+                <softDeadline>0.0</softDeadline>
                 <softDeadline>0.0</softDeadline>
             </classSoftDeadlines>
             <section className="Queue">
@@ -58,33 +17,66 @@
                     <value>-1</value>
                 </parameter>
                 <parameter array="true" classPath="java.lang.String" name="dropStrategies">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="java.lang.String" name="dropStrategy">
                         <value>drop</value>
                     </subParameter>
                 </parameter>
                 <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
                 <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
                 </parameter>
             </section>
             <section className="Delay">
                 <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
+                    <refClass>Node1</refClass>
                     <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
-                        <subParameter classPath="jmt.engine.random.DeterministicDistr" name="Deterministic"/>
-                        <subParameter classPath="jmt.engine.random.DeterministicDistrPar" name="distrPar">
-                            <subParameter classPath="java.lang.Double" name="t">
-                                <value>5.0</value>
+                        <subParameter classPath="jmt.engine.random.Normal" name="Normal"/>
+                        <subParameter classPath="jmt.engine.random.NormalPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="mean">
+                                <value>6.0</value>
+                            </subParameter>
+                            <subParameter classPath="java.lang.Double" name="standardDeviation">
+                                <value>0.1</value>
                             </subParameter>
                         </subParameter>
                     </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
                 </parameter>
             </section>
             <section className="Router">
                 <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
                 </parameter>
             </section>
@@ -92,45 +84,8 @@
         <node name="Node 2">
             <classSoftDeadlines>
                 <softDeadline>0.0</softDeadline>
-            </classSoftDeadlines>
-            <section className="Queue">
-                <parameter classPath="java.lang.Integer" name="size">
-                    <value>-1</value>
-                </parameter>
-                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="java.lang.String" name="dropStrategy">
-                        <value>drop</value>
-                    </subParameter>
-                </parameter>
-                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
-                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
-                </parameter>
-            </section>
-            <section className="Delay">
-                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
-                        <subParameter classPath="jmt.engine.random.DeterministicDistr" name="Deterministic"/>
-                        <subParameter classPath="jmt.engine.random.DeterministicDistrPar" name="distrPar">
-                            <subParameter classPath="java.lang.Double" name="t">
-                                <value>1.0</value>
-                            </subParameter>
-                        </subParameter>
-                    </subParameter>
-                </parameter>
-            </section>
-            <section className="Router">
-                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
-                </parameter>
-            </section>
-        </node>
-        <node name="Node 3">
-            <classSoftDeadlines>
+                <softDeadline>0.0</softDeadline>
+                <softDeadline>0.0</softDeadline>
                 <softDeadline>0.0</softDeadline>
             </classSoftDeadlines>
             <section className="Queue">
@@ -138,25 +93,128 @@
                     <value>-1</value>
                 </parameter>
                 <parameter array="true" classPath="java.lang.String" name="dropStrategies">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="java.lang.String" name="dropStrategy">
                         <value>drop</value>
                     </subParameter>
                 </parameter>
                 <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
                 <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
                 </parameter>
             </section>
             <section className="Delay">
                 <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
+                    <refClass>Node2</refClass>
                     <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
-                        <subParameter classPath="jmt.engine.random.DeterministicDistr" name="Deterministic"/>
-                        <subParameter classPath="jmt.engine.random.DeterministicDistrPar" name="distrPar">
-                            <subParameter classPath="java.lang.Double" name="t">
-                                <value>10.0</value>
+                        <subParameter classPath="jmt.engine.random.Normal" name="Normal"/>
+                        <subParameter classPath="jmt.engine.random.NormalPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="mean">
+                                <value>5.0</value>
+                            </subParameter>
+                            <subParameter classPath="java.lang.Double" name="standardDeviation">
+                                <value>0.1</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
+                </parameter>
+            </section>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <node name="Node 3">
+            <classSoftDeadlines>
+                <softDeadline>0.0</softDeadline>
+                <softDeadline>0.0</softDeadline>
+                <softDeadline>0.0</softDeadline>
+                <softDeadline>0.0</softDeadline>
+            </classSoftDeadlines>
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="Delay">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Normal" name="Normal"/>
+                        <subParameter classPath="jmt.engine.random.NormalPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="mean">
+                                <value>4.0</value>
+                            </subParameter>
+                            <subParameter classPath="java.lang.Double" name="standardDeviation">
+                                <value>0.1</value>
                             </subParameter>
                         </subParameter>
                     </subParameter>
@@ -164,13 +222,273 @@
             </section>
             <section className="Router">
                 <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <node name="Success">
+            <section className="JobSink"/>
+        </node>
+        <node name="Source 1">
+            <section className="RandomSource">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <value>null</value>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.08</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <value>null</value>
+                    </subParameter>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <value>null</value>
+                    </subParameter>
+                </parameter>
+            </section>
+            <section className="ServiceTunnel"/>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <node name="Source 2">
+            <section className="RandomSource">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <value>null</value>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <value>null</value>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.09</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <value>null</value>
+                    </subParameter>
+                </parameter>
+            </section>
+            <section className="ServiceTunnel"/>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <node name="Source 3">
+            <section className="RandomSource">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <value>null</value>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <value>null</value>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <value>null</value>
+                    </subParameter>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
+                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
+                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
+                            <subParameter classPath="java.lang.Double" name="lambda">
+                                <value>0.12</value>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
+                </parameter>
+            </section>
+            <section className="ServiceTunnel"/>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                </parameter>
+            </section>
+        </node>
+        <node name="ClassSwitch_1">
+            <section className="Queue">
+                <parameter classPath="java.lang.Integer" name="size">
+                    <value>-1</value>
+                </parameter>
+                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                </parameter>
+                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                </parameter>
+            </section>
+            <section className="ClassSwitch">
+                <parameter array="true" classPath="java.lang.Object" name="matrix">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter array="true" classPath="java.lang.Float" name="row">
+                        <refClass>UnderwaterPacket</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>1.0</value>
+                        </subParameter>
+                        <refClass>Node1</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                        <refClass>Node2</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                        <refClass>Node3</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter array="true" classPath="java.lang.Float" name="row">
+                        <refClass>UnderwaterPacket</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>1.0</value>
+                        </subParameter>
+                        <refClass>Node1</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                        <refClass>Node2</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                        <refClass>Node3</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter array="true" classPath="java.lang.Float" name="row">
+                        <refClass>UnderwaterPacket</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>1.0</value>
+                        </subParameter>
+                        <refClass>Node1</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                        <refClass>Node2</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                        <refClass>Node3</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                    </subParameter>
+                    <refClass>Node3</refClass>
+                    <subParameter array="true" classPath="java.lang.Float" name="row">
+                        <refClass>UnderwaterPacket</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>1.0</value>
+                        </subParameter>
+                        <refClass>Node1</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                        <refClass>Node2</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                        <refClass>Node3</refClass>
+                        <subParameter classPath="java.lang.Float" name="cell">
+                            <value>0.0</value>
+                        </subParameter>
+                    </subParameter>
+                </parameter>
+            </section>
+            <section className="Router">
+                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
                 </parameter>
             </section>
         </node>
         <node name="Buoy">
             <classSoftDeadlines>
+                <softDeadline>0.0</softDeadline>
+                <softDeadline>0.0</softDeadline>
+                <softDeadline>0.0</softDeadline>
                 <softDeadline>0.0</softDeadline>
             </classSoftDeadlines>
             <quantumSize>
@@ -181,17 +499,35 @@
             </quantumSwitchoverTime>
             <section className="Queue">
                 <parameter classPath="java.lang.Integer" name="size">
-                    <value>-1</value>
+                    <value>1</value>
                 </parameter>
                 <parameter array="true" classPath="java.lang.String" name="dropStrategies">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="java.lang.String" name="dropStrategy">
+                        <value>drop</value>
+                    </subParameter>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="java.lang.String" name="dropStrategy">
                         <value>drop</value>
                     </subParameter>
                 </parameter>
                 <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
                 <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
                 </parameter>
             </section>
@@ -200,13 +536,25 @@
                     <value>1</value>
                 </parameter>
                 <parameter array="true" classPath="java.lang.Integer" name="numberOfVisits">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="java.lang.Integer" name="numberOfVisits">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="java.lang.Integer" name="numberOfVisits">
                         <value>1</value>
                     </subParameter>
                 </parameter>
                 <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
                     <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
                         <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
                         <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
@@ -215,9 +563,27 @@
                             </subParameter>
                         </subParameter>
                     </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
+                    <refClass>Node3</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.DisabledServiceTimeStrategy" name="DisabledServiceTimeStrategy"/>
                 </parameter>
                 <parameter array="true" classPath="java.lang.Integer" name="classParallelism">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="java.lang.Integer" name="serverParallelism">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="java.lang.Integer" name="serverParallelism">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="java.lang.Integer" name="serverParallelism">
+                        <value>1</value>
+                    </subParameter>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="java.lang.Integer" name="serverParallelism">
                         <value>1</value>
                     </subParameter>
@@ -237,6 +603,15 @@
                         <subParameter classPath="java.lang.Boolean" name="compatibilities">
                             <value>true</value>
                         </subParameter>
+                        <subParameter classPath="java.lang.Boolean" name="compatibilities">
+                            <value>true</value>
+                        </subParameter>
+                        <subParameter classPath="java.lang.Boolean" name="compatibilities">
+                            <value>true</value>
+                        </subParameter>
+                        <subParameter classPath="java.lang.Boolean" name="compatibilities">
+                            <value>true</value>
+                        </subParameter>
                     </subParameter>
                 </parameter>
                 <parameter classPath="java.lang.String" name="schedulingPolicy">
@@ -245,206 +620,75 @@
             </section>
             <section className="Router">
                 <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.LoadDependentRoutingStrategy" name="Load Dependent Routing">
-                        <subParameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategies.LoadDependentRoutingParameter" name="LoadDependentRoutingParameter">
-                            <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.LoadDependentRoutingParameter" name="LoadDependentRoutingParameter">
-                                <subParameter classPath="java.lang.Integer" name="from">
-                                    <value>1</value>
-                                </subParameter>
-                                <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
-                                    <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
-                                        <subParameter classPath="java.lang.String" name="stationName">
-                                            <value>Success_1</value>
-                                        </subParameter>
-                                        <subParameter classPath="java.lang.Double" name="probability">
-                                            <value>1.0</value>
-                                        </subParameter>
-                                    </subParameter>
-                                    <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
-                                        <subParameter classPath="java.lang.String" name="stationName">
-                                            <value>Discard_1</value>
-                                        </subParameter>
-                                        <subParameter classPath="java.lang.Double" name="probability">
-                                            <value>0.0</value>
-                                        </subParameter>
-                                    </subParameter>
-                                </subParameter>
-                            </subParameter>
-                            <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.LoadDependentRoutingParameter" name="LoadDependentRoutingParameter">
-                                <subParameter classPath="java.lang.Integer" name="from">
-                                    <value>3</value>
-                                </subParameter>
-                                <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
-                                    <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
-                                        <subParameter classPath="java.lang.String" name="stationName">
-                                            <value>Success_1</value>
-                                        </subParameter>
-                                        <subParameter classPath="java.lang.Double" name="probability">
-                                            <value>0.0</value>
-                                        </subParameter>
-                                    </subParameter>
-                                    <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
-                                        <subParameter classPath="java.lang.String" name="stationName">
-                                            <value>Discard_1</value>
-                                        </subParameter>
-                                        <subParameter classPath="java.lang.Double" name="probability">
-                                            <value>1.0</value>
-                                        </subParameter>
-                                    </subParameter>
-                                </subParameter>
-                            </subParameter>
-                        </subParameter>
-                    </subParameter>
-                </parameter>
-            </section>
-        </node>
-        <node name="Discard">
-            <section className="JobSink"/>
-        </node>
-        <node name="Success">
-            <section className="JobSink"/>
-        </node>
-        <node name="Success_1">
-            <classSoftDeadlines>
-                <softDeadline>0.0</softDeadline>
-            </classSoftDeadlines>
-            <section className="Queue">
-                <parameter classPath="java.lang.Integer" name="size">
-                    <value>-1</value>
-                </parameter>
-                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="java.lang.String" name="dropStrategy">
-                        <value>drop</value>
-                    </subParameter>
-                </parameter>
-                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
-                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
-                </parameter>
-            </section>
-            <section className="Delay">
-                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
-                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
-                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
-                            <subParameter classPath="java.lang.Double" name="lambda">
-                                <value>1.0</value>
-                            </subParameter>
-                        </subParameter>
-                    </subParameter>
-                </parameter>
-            </section>
-            <section className="Router">
-                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
-                    <refClass>UnderwaterNodes</refClass>
+                    <refClass>UnderwaterPacket</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node1</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node2</refClass>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <refClass>Node3</refClass>
                     <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
                 </parameter>
             </section>
         </node>
-        <node name="Discard_1">
-            <classSoftDeadlines>
-                <softDeadline>0.0</softDeadline>
-            </classSoftDeadlines>
-            <section className="Queue">
-                <parameter classPath="java.lang.Integer" name="size">
-                    <value>-1</value>
-                </parameter>
-                <parameter array="true" classPath="java.lang.String" name="dropStrategies">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="java.lang.String" name="dropStrategy">
-                        <value>drop</value>
-                    </subParameter>
-                </parameter>
-                <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
-                <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.QueuePutStrategies.TailStrategy" name="TailStrategy"/>
-                </parameter>
-            </section>
-            <section className="Delay">
-                <parameter array="true" classPath="jmt.engine.NetStrategies.ServiceStrategy" name="ServiceStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.ServiceStrategies.ServiceTimeStrategy" name="ServiceTimeStrategy">
-                        <subParameter classPath="jmt.engine.random.Exponential" name="Exponential"/>
-                        <subParameter classPath="jmt.engine.random.ExponentialPar" name="distrPar">
-                            <subParameter classPath="java.lang.Double" name="lambda">
-                                <value>1.0</value>
-                            </subParameter>
-                        </subParameter>
-                    </subParameter>
-                </parameter>
-            </section>
-            <section className="Router">
-                <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
-                    <refClass>UnderwaterNodes</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
-                </parameter>
-            </section>
-        </node>
-        <measure alpha="0.01" name="Success_Throughput per Sink" nodeType="station" precision="0.03" referenceNode="Success" referenceUserClass="" type="Throughput per Sink" verbose="false"/>
-        <measure alpha="0.01" name="Buoy_Number of Customers" nodeType="station" precision="0.03" referenceNode="Buoy" referenceUserClass="" type="Number of Customers" verbose="false"/>
-        <connection source="Source" target="NodesRouter"/>
-        <connection source="NodesRouter" target="Node 1"/>
-        <connection source="NodesRouter" target="Node 2"/>
-        <connection source="NodesRouter" target="Node 3"/>
-        <connection source="Node 1" target="Buoy"/>
-        <connection source="Node 2" target="Buoy"/>
-        <connection source="Node 3" target="Buoy"/>
-        <connection source="Buoy" target="Success_1"/>
-        <connection source="Buoy" target="Discard_1"/>
-        <connection source="Success_1" target="Success"/>
-        <connection source="Discard_1" target="Discard"/>
+        <measure alpha="0.01" name="Buoy_UnderwaterPacket_Drop Rate" nodeType="station" precision="0.03" referenceNode="Buoy" referenceUserClass="UnderwaterPacket" type="Drop Rate" verbose="false"/>
+        <measure alpha="0.01" name="Buoy_UnderwaterPacket_Arrival Rate" nodeType="station" precision="0.03" referenceNode="Buoy" referenceUserClass="UnderwaterPacket" type="Arrival Rate" verbose="false"/>
+        <measure alpha="0.01" name="Buoy_UnderwaterPacket_Throughput" nodeType="station" precision="0.03" referenceNode="Buoy" referenceUserClass="UnderwaterPacket" type="Throughput" verbose="false"/>
+        <connection source="Node 1" target="ClassSwitch_1"/>
+        <connection source="Node 2" target="ClassSwitch_1"/>
+        <connection source="Node 3" target="ClassSwitch_1"/>
+        <connection source="Source 1" target="Node 1"/>
+        <connection source="Source 2" target="Node 2"/>
+        <connection source="Source 3" target="Node 3"/>
+        <connection source="ClassSwitch_1" target="Buoy"/>
+        <connection source="Buoy" target="Success"/>
     </sim>
     <jmodel xsi:noNamespaceSchemaLocation="JModelGUI.xsd">
-        <userClass color="#FF0000FF" name="UnderwaterNodes"/>
-        <station name="Source">
-            <position angle="0.0" rotate="false" x="25.0" y="93.0"/>
-        </station>
-        <station name="NodesRouter">
-            <position angle="0.0" rotate="false" x="148.0" y="93.0"/>
-        </station>
+        <userClass color="#FF0000FF" name="UnderwaterPacket"/>
+        <userClass color="#FFFF0000" name="Node1"/>
+        <userClass color="#FF00FF00" name="Node2"/>
+        <userClass color="#FFFF00FF" name="Node3"/>
         <station name="Node 1">
-            <position angle="0.0" rotate="false" x="304.0" y="357.0"/>
+            <position angle="0.0" rotate="false" x="169.0" y="356.0"/>
         </station>
         <station name="Node 2">
-            <position angle="0.0" rotate="false" x="304.0" y="488.0"/>
+            <position angle="0.0" rotate="false" x="169.0" y="213.0"/>
         </station>
         <station name="Node 3">
-            <position angle="0.0" rotate="false" x="304.0" y="70.0"/>
-        </station>
-        <station name="Buoy">
-            <position angle="0.0" rotate="false" x="424.0" y="90.0"/>
-        </station>
-        <station name="Discard">
-            <position angle="0.0" rotate="false" x="723.0" y="241.0"/>
+            <position angle="0.0" rotate="false" x="169.0" y="70.0"/>
         </station>
         <station name="Success">
-            <position angle="0.0" rotate="false" x="722.0" y="93.0"/>
+            <position angle="0.0" rotate="false" x="587.0" y="93.0"/>
         </station>
-        <station name="Success_1">
-            <position angle="0.0" rotate="false" x="576.0" y="70.0"/>
+        <station name="Source 1">
+            <position angle="0.0" rotate="false" x="25.0" y="379.0"/>
         </station>
-        <station name="Discard_1">
-            <position angle="0.0" rotate="false" x="577.0" y="218.0"/>
+        <station name="Source 2">
+            <position angle="0.0" rotate="false" x="25.0" y="236.0"/>
+        </station>
+        <station name="Source 3">
+            <position angle="0.0" rotate="false" x="25.0" y="93.0"/>
+        </station>
+        <station name="ClassSwitch_1">
+            <position angle="0.0" rotate="false" x="290.0" y="95.0"/>
+        </station>
+        <station name="Buoy">
+            <position angle="0.0" rotate="false" x="429.0" y="90.0"/>
         </station>
     </jmodel>
-    <results elapsedTime="5817" logDecimalSeparator="," logDelimiter=";" pollingInterval="1.0" xsi:noNamespaceSchemaLocation="Results.xsd">
-        <measure alpha="0.99" analyzedSamples="0" discardedSamples="0" finalValue="0.0" name="Success_Throughput per Sink" nodeType="station" precision="0.03" referenceClass="" referenceStation="Success" state="3" type="23">
-            <sample lastIntervalAvgValue="Infinity" meanValue="0.0" simulationTime="0.0"/>
-            <sample lastIntervalAvgValue="0.0" meanValue="0.0" simulationTime="0.0"/>
+    <results elapsedTime="1814" logDecimalSeparator="," logDelimiter=";" pollingInterval="1.0" xsi:noNamespaceSchemaLocation="Results.xsd">
+        <measure alpha="0.99" analyzedSamples="46080" discardedSamples="695" finalValue="0.06552425361514769" name="Buoy_UnderwaterPacket_Drop Rate" nodeType="station" precision="0.03" referenceClass="UnderwaterPacket" referenceStation="Buoy" state="1" type="8">
+            <sample lastIntervalAvgValue="0.0616993769699457" meanValue="0.0616993769699457" simulationTime="4554.3409642025645"/>
+            <sample lastIntervalAvgValue="0.06589789677903272" lowerBound="0.06284649948607836" meanValue="0.06545099507617735" simulationTime="400864.4096689984" upperBound="0.06828069556784495"/>
+            <sample lastIntervalAvgValue="0.06520757395967765" lowerBound="0.06413850945989184" meanValue="0.06552425361514769" simulationTime="713374.1192404835" upperBound="0.0669711994355255"/>
         </measure>
-        <measure alpha="0.99" analyzedSamples="1000000" discardedSamples="975000" finalValue="987505.6509139987" name="Buoy_Number of Customers" nodeType="station" precision="0.03" referenceClass="" referenceStation="Buoy" state="2" type="0">
-            <sample lastIntervalAvgValue="1528.985242539312" meanValue="1528.985242539312" simulationTime="306.53773422451593"/>
-            <sample lastIntervalAvgValue="106096.02779581388" meanValue="196749.48735588806" simulationTime="20944.039071456995"/>
-            <sample lastIntervalAvgValue="300370.61611212615" meanValue="378736.3651730077" simulationTime="39184.162349717226"/>
-            <sample lastIntervalAvgValue="477950.3114778189" meanValue="552126.6339881375" simulationTime="56512.15674640411"/>
-            <sample lastIntervalAvgValue="646037.7173868351" meanValue="714889.8923609032" simulationTime="72787.44755455774"/>
-            <sample lastIntervalAvgValue="815095.0905001162" meanValue="890149.3090280384" simulationTime="90331.53366740336"/>
-            <sample lastIntervalAvgValue="951380.4847508823" meanValue="987505.6509139987" simulationTime="100024.63056365374"/>
+        <measure alpha="0.99" analyzedSamples="61440" discardedSamples="945" finalValue="0.29115235334169376" name="Buoy_UnderwaterPacket_Arrival Rate" nodeType="station" precision="0.03" referenceClass="UnderwaterPacket" referenceStation="Buoy" state="1" type="4">
+            <sample lastIntervalAvgValue="0.28456367456601295" meanValue="0.28456367456601295" simulationTime="4554.3409642025645"/>
+            <sample lastIntervalAvgValue="0.291667921230436" lowerBound="0.286242578780509" meanValue="0.29115235334169376" simulationTime="214001.4400565153" upperBound="0.2962334970847167"/>
+        </measure>
+        <measure alpha="0.99" analyzedSamples="51200" discardedSamples="735" finalValue="0.2246981198765095" name="Buoy_UnderwaterPacket_Throughput" nodeType="station" precision="0.03" referenceClass="UnderwaterPacket" referenceStation="Buoy" state="1" type="5">
+            <sample lastIntervalAvgValue="0.22286172472416788" meanValue="0.22286172472416788" simulationTime="4554.393542705676"/>
+            <sample lastIntervalAvgValue="0.2253189271965566" lowerBound="0.22090936569197905" meanValue="0.2246981198765095" simulationTime="230545.17307264733" upperBound="0.2286191015651091"/>
         </measure>
     </results>
 </archive>
