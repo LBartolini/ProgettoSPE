@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="underwater_performance.jsimg" timestamp="Tue Mar 10 11:42:36 CET 2026" xsi:noNamespaceSchemaLocation="Archive.xsd">
+<archive xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="underwater_performance.jsimg" timestamp="Thu Mar 12 12:14:00 CET 2026" xsi:noNamespaceSchemaLocation="Archive.xsd">
     <sim disableStatisticStop="false" logDecimalSeparator="," logDelimiter=";" logPath="/home/lorenzo/JMT" logReplaceMode="0" maxEvents="-1" maxSamples="1000000" name="underwater_performance.jsimg" polling="1.0" xsi:noNamespaceSchemaLocation="SIMmodeldefinition.xsd">
         <userClass name="UnderwaterPacket" priority="0" referenceSource="ClassSwitch" softDeadline="0.0" type="open"/>
         <userClass name="Node1" priority="0" referenceSource="Source 1" softDeadline="0.0" type="open"/>
@@ -499,7 +499,7 @@
             </quantumSwitchoverTime>
             <section className="Queue">
                 <parameter classPath="java.lang.Integer" name="size">
-                    <value>1</value>
+                    <value>-1</value>
                 </parameter>
                 <parameter array="true" classPath="java.lang.String" name="dropStrategies">
                     <refClass>UnderwaterPacket</refClass>
@@ -621,7 +621,56 @@
             <section className="Router">
                 <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy">
                     <refClass>UnderwaterPacket</refClass>
-                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
+                    <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.LoadDependentRoutingStrategy" name="Load Dependent Routing">
+                        <subParameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategies.LoadDependentRoutingParameter" name="LoadDependentRoutingParameter">
+                            <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.LoadDependentRoutingParameter" name="LoadDependentRoutingParameter">
+                                <subParameter classPath="java.lang.Integer" name="from">
+                                    <value>0</value>
+                                </subParameter>
+                                <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
+                                    <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                        <subParameter classPath="java.lang.String" name="stationName">
+                                            <value>Success</value>
+                                        </subParameter>
+                                        <subParameter classPath="java.lang.Double" name="probability">
+                                            <value>1.0</value>
+                                        </subParameter>
+                                    </subParameter>
+                                    <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                        <subParameter classPath="java.lang.String" name="stationName">
+                                            <value>Discard</value>
+                                        </subParameter>
+                                        <subParameter classPath="java.lang.Double" name="probability">
+                                            <value>0.0</value>
+                                        </subParameter>
+                                    </subParameter>
+                                </subParameter>
+                            </subParameter>
+                            <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.LoadDependentRoutingParameter" name="LoadDependentRoutingParameter">
+                                <subParameter classPath="java.lang.Integer" name="from">
+                                    <value>1</value>
+                                </subParameter>
+                                <subParameter array="true" classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntryArray">
+                                    <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                        <subParameter classPath="java.lang.String" name="stationName">
+                                            <value>Success</value>
+                                        </subParameter>
+                                        <subParameter classPath="java.lang.Double" name="probability">
+                                            <value>0.0</value>
+                                        </subParameter>
+                                    </subParameter>
+                                    <subParameter classPath="jmt.engine.random.EmpiricalEntry" name="EmpiricalEntry">
+                                        <subParameter classPath="java.lang.String" name="stationName">
+                                            <value>Discard</value>
+                                        </subParameter>
+                                        <subParameter classPath="java.lang.Double" name="probability">
+                                            <value>1.0</value>
+                                        </subParameter>
+                                    </subParameter>
+                                </subParameter>
+                            </subParameter>
+                        </subParameter>
+                    </subParameter>
                     <refClass>Node1</refClass>
                     <subParameter classPath="jmt.engine.NetStrategies.RoutingStrategies.RandomStrategy" name="Random"/>
                     <refClass>Node2</refClass>
@@ -631,9 +680,12 @@
                 </parameter>
             </section>
         </node>
-        <measure alpha="0.01" name="Buoy_UnderwaterPacket_Drop Rate" nodeType="station" precision="0.03" referenceNode="Buoy" referenceUserClass="UnderwaterPacket" type="Drop Rate" verbose="false"/>
+        <node name="Discard">
+            <section className="JobSink"/>
+        </node>
         <measure alpha="0.01" name="Buoy_UnderwaterPacket_Arrival Rate" nodeType="station" precision="0.03" referenceNode="Buoy" referenceUserClass="UnderwaterPacket" type="Arrival Rate" verbose="false"/>
-        <measure alpha="0.01" name="Buoy_UnderwaterPacket_Throughput" nodeType="station" precision="0.03" referenceNode="Buoy" referenceUserClass="UnderwaterPacket" type="Throughput" verbose="false"/>
+        <measure alpha="0.01" name="Success_UnderwaterPacket_Throughput per Sink" nodeType="station" precision="0.03" referenceNode="Success" referenceUserClass="UnderwaterPacket" type="Throughput per Sink" verbose="false"/>
+        <measure alpha="0.01" name="Discard_UnderwaterPacket_Throughput per Sink" nodeType="station" precision="0.03" referenceNode="Discard" referenceUserClass="UnderwaterPacket" type="Throughput per Sink" verbose="false"/>
         <connection source="Node 1" target="ClassSwitch_1"/>
         <connection source="Node 2" target="ClassSwitch_1"/>
         <connection source="Node 3" target="ClassSwitch_1"/>
@@ -642,6 +694,7 @@
         <connection source="Source 3" target="Node 3"/>
         <connection source="ClassSwitch_1" target="Buoy"/>
         <connection source="Buoy" target="Success"/>
+        <connection source="Buoy" target="Discard"/>
     </sim>
     <jmodel xsi:noNamespaceSchemaLocation="JModelGUI.xsd">
         <userClass color="#FF0000FF" name="UnderwaterPacket"/>
@@ -675,20 +728,22 @@
         <station name="Buoy">
             <position angle="0.0" rotate="false" x="429.0" y="90.0"/>
         </station>
+        <station name="Discard">
+            <position angle="0.0" rotate="false" x="603.0" y="239.0"/>
+        </station>
     </jmodel>
-    <results elapsedTime="1814" logDecimalSeparator="," logDelimiter=";" pollingInterval="1.0" xsi:noNamespaceSchemaLocation="Results.xsd">
-        <measure alpha="0.99" analyzedSamples="46080" discardedSamples="695" finalValue="0.06552425361514769" name="Buoy_UnderwaterPacket_Drop Rate" nodeType="station" precision="0.03" referenceClass="UnderwaterPacket" referenceStation="Buoy" state="1" type="8">
-            <sample lastIntervalAvgValue="0.0616993769699457" meanValue="0.0616993769699457" simulationTime="4554.3409642025645"/>
-            <sample lastIntervalAvgValue="0.06589789677903272" lowerBound="0.06284649948607836" meanValue="0.06545099507617735" simulationTime="400864.4096689984" upperBound="0.06828069556784495"/>
-            <sample lastIntervalAvgValue="0.06520757395967765" lowerBound="0.06413850945989184" meanValue="0.06552425361514769" simulationTime="713374.1192404835" upperBound="0.0669711994355255"/>
+    <results elapsedTime="830" logDecimalSeparator="," logDelimiter=";" pollingInterval="1.0" xsi:noNamespaceSchemaLocation="Results.xsd">
+        <measure alpha="0.99" analyzedSamples="61440" discardedSamples="470" finalValue="0.2917210186022471" name="Buoy_UnderwaterPacket_Arrival Rate" nodeType="station" precision="0.03" referenceClass="UnderwaterPacket" referenceStation="Buoy" state="1" type="4">
+            <sample lastIntervalAvgValue="0.29121406807215433" lowerBound="0.2868539635240061" meanValue="0.2917210186022471" simulationTime="212592.751476074" upperBound="0.29675608307684753"/>
+            <sample lastIntervalAvgValue="0.29121406807215433" lowerBound="0.2868539635240061" meanValue="0.2917210186022471" simulationTime="212592.751476074" upperBound="0.29675608307684753"/>
         </measure>
-        <measure alpha="0.99" analyzedSamples="61440" discardedSamples="945" finalValue="0.29115235334169376" name="Buoy_UnderwaterPacket_Arrival Rate" nodeType="station" precision="0.03" referenceClass="UnderwaterPacket" referenceStation="Buoy" state="1" type="4">
-            <sample lastIntervalAvgValue="0.28456367456601295" meanValue="0.28456367456601295" simulationTime="4554.3409642025645"/>
-            <sample lastIntervalAvgValue="0.291667921230436" lowerBound="0.286242578780509" meanValue="0.29115235334169376" simulationTime="214001.4400565153" upperBound="0.2962334970847167"/>
+        <measure alpha="0.99" analyzedSamples="0" discardedSamples="0" finalValue="0.0" name="Success_UnderwaterPacket_Throughput per Sink" nodeType="station" precision="0.03" referenceClass="UnderwaterPacket" referenceStation="Success" state="3" type="23">
+            <sample lastIntervalAvgValue="Infinity" meanValue="0.0" simulationTime="0.0"/>
+            <sample lastIntervalAvgValue="0.0" meanValue="0.0" simulationTime="0.0"/>
         </measure>
-        <measure alpha="0.99" analyzedSamples="51200" discardedSamples="735" finalValue="0.2246981198765095" name="Buoy_UnderwaterPacket_Throughput" nodeType="station" precision="0.03" referenceClass="UnderwaterPacket" referenceStation="Buoy" state="1" type="5">
-            <sample lastIntervalAvgValue="0.22286172472416788" meanValue="0.22286172472416788" simulationTime="4554.393542705676"/>
-            <sample lastIntervalAvgValue="0.2253189271965566" lowerBound="0.22090936569197905" meanValue="0.2246981198765095" simulationTime="230545.17307264733" upperBound="0.2286191015651091"/>
+        <measure alpha="0.99" analyzedSamples="0" discardedSamples="0" finalValue="0.0" name="Discard_UnderwaterPacket_Throughput per Sink" nodeType="station" precision="0.03" referenceClass="UnderwaterPacket" referenceStation="Discard" state="3" type="23">
+            <sample lastIntervalAvgValue="Infinity" meanValue="0.0" simulationTime="0.0"/>
+            <sample lastIntervalAvgValue="0.0" meanValue="0.0" simulationTime="0.0"/>
         </measure>
     </results>
 </archive>

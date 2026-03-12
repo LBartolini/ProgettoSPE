@@ -1,0 +1,15 @@
+{
+  "simulation": {
+    "sim_time": 200000,
+    "warm_up": 10000,
+    "seed": 42
+  },
+  "buoy": {
+    "service_rate": 2
+  },
+  "sources": [
+    {"name": "Source1", "arrival_rate": 0.08},
+    {"name": "Source2", "arrival_rate": 0.09},
+    {"name": "Source3", "arrival_rate": 0.12}
+  ]
+}
